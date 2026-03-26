@@ -1,11 +1,11 @@
-;;; generate.el --- Random testing for Emacs Lisp -*- lexical-binding: t; no-byte-compile: t -*-
+;;; org-x.el --- Extensions for org-mode -*- lexical-binding: t; no-byte-compile: t -*-
 
 ;; Author: Earl Chase
 ;; Maintainer: Earl Chase
-;; Version: 0.0
-;; Keywords: tools, maint
+;; Version: 0.0.0
+;; Keywords: tools
 ;; Package-Requires: ((emacs "30.1") (org "9.7") (dash "2.20.0") (s "1.13.1") (compat "29"))
-;; Homepage: https://github.com/ApollonDeParnasse/generate
+;; Homepage: https://github.com/ApollonDeParnasse/org-x
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; Generate random data.
+;; Collections of extensions for org-mode.
 
 ;;; Code:
 
@@ -73,3 +73,18 @@
 (defalias 'org-cancel-todos-in-region (org--create-org-todo-in-region-command "CANCELED"))
 
 (defalias 'org-mark-all-headings-in-region-as-todo (org--create-org-todo-in-region-command "TODO"))
+
+(defun org-x-create-file-for-org-agenda-files (org-directories file-name)
+  (let* ((files-list (flatten-list (mapcar (lambda (directory) (directory-files-recursively directory "\.org$"))
+  					org-directories)))
+	 (string (string-join files-list "\n")))
+    (with-temp-buffer
+      (insert string)
+      (write-file file-name))))
+
+(provide 'org-x)
+;;; org-x.el ends here
+
+;; Local Variables:
+;; read-symbol-shorthands: (("ox-" . "org-x-"))
+;; End:

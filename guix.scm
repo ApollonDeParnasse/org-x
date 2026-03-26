@@ -1,4 +1,4 @@
-;;; guix.scm --- Guix package for generate
+;;; guix.scm --- Guix package for org-x
 
 (define-module (org-x)
   #:use-module (guix packages)
