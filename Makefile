@@ -3,13 +3,17 @@ PKG = org-x
 LOAD_PATH  += -L .
 LOAD_PATH  += -L ./tests
 
-.PHONY: test
+.PHONY: test init
+
+init: ## initiate
+init:
+	$(EMACS) --batch -L . \
+		 $(LOAD_PATH) \
+		 -l init.el;
 
 test: ## Run tests
-test: 
+test:
 	$(EMACS) --batch -L . \
 		 $(LOAD_PATH) \
 		 -l org-x-tests.el \
-		 --eval "(ert-run-tests-batch-and-exit)";
-
-
+		 --eval "(generate-run-tests-batch-and-exit)";
