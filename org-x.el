@@ -168,7 +168,7 @@ file has changed on disk."
 ;;;###autoload
 (defun org-x-create-file-for-org-agenda-files (org-directories file-name)
   (let* ((files-list (flatten-list (mapcar (lambda (directory) (directory-files-recursively directory "\.org$"))
-  					org-directories)))
+  					   org-directories)))
 	 (string (string-join files-list "\n")))
     (with-temp-buffer
       (insert string)
@@ -184,14 +184,14 @@ file has changed on disk."
 	 (stars (org-x--create-headline-stars level-value))
 	 (raw-value (format "%s %s" stars title))
 	 (props `(:raw-value ,raw-value
-		  :title ,title
-		  :level ,level-value
-		  ,@(when tags
-		      `(:tags ,tags))
-		  ,@(when todo-keyword
-		      `(:todo-keyword ,todo-keyword))
-		  ,@(when todo-type
-		      `(:todo-type ,todo-type)))))
+			     :title ,title
+			     :level ,level-value
+			     ,@(when tags
+				 `(:tags ,tags))
+			     ,@(when todo-keyword
+				 `(:todo-keyword ,todo-keyword))
+			     ,@(when todo-type
+				 `(:todo-type ,todo-type)))))
     (org-element-create
      'headline
      props)))
@@ -203,13 +203,13 @@ file has changed on disk."
 					  value)
   (let* ((block-value (or value ""))
 	 (props `(,@(when language
-		     `(:language ,language))
-		 ,@(when switches
-		       `(:switches ,switches))
-		 ,@(when parameters
-		       `(:parameters ,parameters))
-		 ,@(when value
-		     `(:value ,value)))))
+		      `(:language ,language))
+		  ,@(when switches
+		      `(:switches ,switches))
+		  ,@(when parameters
+		      `(:parameters ,parameters))
+		  ,@(when value
+		      `(:value ,value)))))
     (org-element-create
      'src-block
      props)))
@@ -349,7 +349,7 @@ code."
 
 (cl-defun org-x--create-yank-last-list-as-headlines-function (keyword &optional subheadlinep (preprocessor #'read))
   (let* ((base-converter (org-x--convert-list-into-headlines keyword subheadlinep))
-	(converter (-compose base-converter preprocessor)))
+	 (converter (-compose base-converter preprocessor)))
     (org-x--create-yank-last-kill-as-function converter)))
 
 (defalias 'org-x-yank-last-elisp-list-as-headlines (org-x--create-yank-last-list-as-headlines-function nil))
@@ -369,12 +369,12 @@ code."
     (user-error "You need to install the tree-sitter grammar for %s" lang))
   (with-temp-buffer
     (progn (insert text)
-    (goto-char (point-min))
-    (treesit-parser-create lang)
-    (mapcar #'treesit-node-text
-	    (--> (treesit-node-at (point))
-		 (treesit-node-parent it)
-		 (treesit-node-children it t))))))
+	   (goto-char (point-min))
+	   (treesit-parser-create lang)
+	   (mapcar #'treesit-node-text
+		   (--> (treesit-node-at (point))
+			(treesit-node-parent it)
+			(treesit-node-children it t))))))
 
 (defun org-x--create-yank-last-kill-as-headlines-tree-sitter-function (lang keyword subheadlinep)
   (let* ((preprocessor (-partial #'org-x--tree-sitter-list-parser lang)))
@@ -536,10 +536,10 @@ The resulting list will be added to the kill ring and then yanked at point.
 
 (defun org-x--get-file-clock-strings (file)
   (--> file
-   (org-babel-eval-read-file it)
-   (s-split "\n" it)
-   (mapcar #'s-trim it)
-   (seq-filter (-partial #'s-match org-element-clock-line-re) it)))
+       (org-babel-eval-read-file it)
+       (s-split "\n" it)
+       (mapcar #'s-trim it)
+       (seq-filter (-partial #'s-match org-element-clock-line-re) it)))
 
 ;;(org-x--get-file-clock-strings "/home/earl/org/la-mentale.org")
 

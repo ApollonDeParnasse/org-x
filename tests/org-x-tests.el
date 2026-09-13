@@ -94,9 +94,9 @@ otherwise place the point at the beginning of the inserted text."
 	 (blank-lines (make-string blank-lines-count ?\n))
 	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
 	 (test-tree (->> test-headline-level
-		     (generate-list-of-n-strings)
-		     (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-		     (s-join "\n")))
+			 (generate-list-of-n-strings)
+			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+			 (s-join "\n")))
 	 (test-buffer-text (format "%s%s" blank-lines  test-tree))
 	 (test-line-number (generate-random-nat-number-in-range (list 1 blank-lines-count))))
     (org-test-with-temp-text test-buffer-text
@@ -112,10 +112,10 @@ otherwise place the point at the beginning of the inserted text."
 	  (blank-lines (make-list blank-lines-count ""))
 	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
 	  (test-tree (--> test-headline-level
-		     (generate-list-of-n-strings it)
-		     (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)) it)
-		     (append it blank-lines)
-		     (s-join "\n" it)))
+			  (generate-list-of-n-strings it)
+			  (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)) it)
+			  (append it blank-lines)
+			  (s-join "\n" it)))
 	  (test-buffer-text (concat test-tree "\n")))
     (org-test-with-temp-text test-buffer-text
 
@@ -125,16 +125,16 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-headlines/without-subheadline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count ""))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 (test-tree (--> test-headline-level
-		     (generate-list-of-n-strings it)
-		     (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)) it)
-		     (append it blank-lines)
-		     (s-join "\n" it)))
-	 (test-buffer-text (concat test-tree "\n")))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count ""))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  (test-tree (--> test-headline-level
+			  (generate-list-of-n-strings it)
+			  (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)) it)
+			  (append it blank-lines)
+			  (s-join "\n" it)))
+	  (test-buffer-text (concat test-tree "\n")))
     (org-test-with-temp-text test-buffer-text
 
       (goto-char (point-max))
@@ -148,16 +148,16 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x--next-headline-level/without-subheadline/before-first-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count ""))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 (test-tree (->> test-headline-level
-			 (generate-list-of-n-strings)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (append blank-lines)
-			 (s-join "\n")))
-	 (test-line-number (generate-random-nat-number-in-range (list 1 blank-lines-count))))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count ""))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  (test-tree (->> test-headline-level
+			  (generate-list-of-n-strings)
+			  (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+			  (append blank-lines)
+			  (s-join "\n")))
+	  (test-line-number (generate-random-nat-number-in-range (list 1 blank-lines-count))))
     (org-test-with-temp-text test-tree
 
       (goto-line test-line-number)
@@ -191,41 +191,41 @@ otherwise place the point at the beginning of the inserted text."
 	 (test-code (generate-random-multiline-string))
 	 (test-parameters (generate-random-string-of-src-block-parameters))
 	 (actual-string (org-x--build-src-block-string
-			  :parameters test-parameters
-			  :language test-language
-			  :value test-code)))
+			 :parameters test-parameters
+			 :language test-language
+			 :value test-code)))
     (should (s-starts-with-p "#+begin_src" actual-string))
     (should (s-ends-with-p "#+end_src" actual-string))))
 
 (generate-ert-deftest-n-times org-x--build-headline-string/simple ()
   :num-runs 100
   (-let* ((test-title (generate-random-word))
-	 (test-level (generate-random-org-headline-level))
-	 (actual-string (org-x--build-headline-string
+	  (test-level (generate-random-org-headline-level))
+	  (actual-string (org-x--build-headline-string
 			  test-title
 			  :level test-level))
-	 ((actual-stars actual-title)
-	  (s-split " " actual-string)))
+	  ((actual-stars actual-title)
+	   (s-split " " actual-string)))
     (should (length= actual-stars test-level))
     (should (equal (s-trim actual-title) test-title))))
 
 (generate-ert-deftest-n-times org-x--build-headline-string/with-src-block ()
   :num-runs 100
   (-let* ((test-title (generate-random-word))
-	 (test-level (generate-random-org-headline-level))
-	 (test-language (generate-random-language-name))
-	 (test-code (generate-random-multiline-string))
-	 (test-parameters (generate-random-string-of-src-block-parameters))
-	 (test-contents (org-x--build-src-block-string
+	  (test-level (generate-random-org-headline-level))
+	  (test-language (generate-random-language-name))
+	  (test-code (generate-random-multiline-string))
+	  (test-parameters (generate-random-string-of-src-block-parameters))
+	  (test-contents (org-x--build-src-block-string
 			  :parameters test-parameters
 			  :language test-language
 			  :value test-code))
-	 (actual-string (org-x--build-headline-string
+	  (actual-string (org-x--build-headline-string
 			  test-title
 			  :level test-level
 			  :contents test-contents))
-	 (actual-headline-part (car (s-split "\n" actual-string)))
-	 ((actual-stars actual-title) (s-split " " actual-headline-part)))
+	  (actual-headline-part (car (s-split "\n" actual-string)))
+	  ((actual-stars actual-title) (s-split " " actual-headline-part)))
     (should (length= actual-stars test-level))
     (should (equal actual-title test-title))
     (should (s-contains-p test-contents actual-string))))
@@ -239,17 +239,17 @@ otherwise place the point at the beginning of the inserted text."
 	 (test-lang (generate-random-language-name))
 	 (test-parameters (generate-random-string-of-src-block-parameters))
 	 (actual-headline (org-x-create-headline-with-src-block
-		       test-title
-		       :level test-level
-		       :language test-lang
-		       :value test-code
-		       :parameters test-parameters)))
-  (should (s-contains-p test-title actual-headline))
-  (should (s-contains-p "#+begin_src" actual-headline))
-  (should (s-contains-p test-code actual-headline))
-  (should (s-contains-p test-lang actual-headline))
-  (should (s-contains-p test-parameters actual-headline))
-  (should (s-ends-with-p "#+end_src" actual-headline))))
+			   test-title
+			   :level test-level
+			   :language test-lang
+			   :value test-code
+			   :parameters test-parameters)))
+    (should (s-contains-p test-title actual-headline))
+    (should (s-contains-p "#+begin_src" actual-headline))
+    (should (s-contains-p test-code actual-headline))
+    (should (s-contains-p test-lang actual-headline))
+    (should (s-contains-p test-parameters actual-headline))
+    (should (s-ends-with-p "#+end_src" actual-headline))))
 
 (generate-ert-deftest-n-times org-x-create-list-of-headlines-with-src-blocks ()
   :num-runs 100
@@ -315,13 +315,13 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x--convert-block-of-text-into-headlines ()
   :num-runs 100
   (let ((test-keyword (generate-seq-take-random-value-from-seq (list nil "TODO")))
-	 (test-subheadlinep (generate-random-boolean)))
+	(test-subheadlinep (generate-random-boolean)))
     (should (functionp (org-x--convert-block-of-text-into-headlines test-keyword test-subheadlinep)))))
 
 (generate-ert-deftest-n-times org-x--convert-list-into-headlines ()
   :num-runs 100
   (let ((test-keyword (generate-seq-take-random-value-from-seq (list nil "TODO")))
-	 (test-subheadlinep (generate-random-boolean)))
+	(test-subheadlinep (generate-random-boolean)))
     (should (functionp (org-x--convert-list-into-headlines test-keyword test-subheadlinep)))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-headlines/empty-buffer ()
@@ -345,22 +345,22 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-headlines/before-first-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count "\n"))
-	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
-	 (test-lines-count (+ blank-lines-count lines-with-content-count))
-	 (test-headline (format "* %s" (generate-random-word)))
-	 (test-buffer-text (concat test-lines "<point>\n" test-headline))
-	 (expected-line (format "* %s" (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
-	    (push-mark)
-	    (goto-char (point-min))
-	    (org-x-convert-buffer-lines-into-headlines)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 ((actual-lines actual-former-first-headline) (funcall (-compose (-juxt #'butlast #'-last-item) #'s-split) "\n" actual-headlines))
-	 (actual-random-line (generate-seq-take-random-value-from-seq actual-lines)))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count "\n"))
+	  (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
+	  (test-lines-count (+ blank-lines-count lines-with-content-count))
+	  (test-headline (format "* %s" (generate-random-word)))
+	  (test-buffer-text (concat test-lines "<point>\n" test-headline))
+	  (expected-line (format "* %s" (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
+	     (push-mark)
+	     (goto-char (point-min))
+	     (org-x-convert-buffer-lines-into-headlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  ((actual-lines actual-former-first-headline) (funcall (-compose (-juxt #'butlast #'-last-item) #'s-split) "\n" actual-headlines))
+	  (actual-random-line (generate-seq-take-random-value-from-seq actual-lines)))
     (should (equal actual-former-first-headline test-headline))
     (should (length= actual-lines lines-with-content-count))
     (should (seq-contains-p actual-lines expected-line))))
@@ -374,9 +374,9 @@ otherwise place the point at the beginning of the inserted text."
 	  (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
 	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
 	  ((test-tree expected-former-first-lines) (->> test-headline-level
-									   (generate-list-of-n-strings)
-									   (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-									   (funcall (-juxt (-partial #'s-join "\n") #'identity))))
+							(generate-list-of-n-strings)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
 	  (test-buffer-text (concat test-tree "\n" "<point>" test-lines))
 	  (expected-stars (make-string test-headline-level ?*))
 	  (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
@@ -396,10 +396,10 @@ otherwise place the point at the beginning of the inserted text."
 	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
 	 (blank-lines (make-list blank-lines-count ""))
 	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content))))
-     (org-test-with-temp-text test-lines
-       (push-mark)
-       (goto-char (point-max))
-       (should-error (org-x-convert-buffer-lines-into-subheadlines) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-lines
+      (push-mark)
+      (goto-char (point-max))
+      (should-error (org-x-convert-buffer-lines-into-subheadlines) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-subheadlines/before-first-headline ()
   :num-runs 100
@@ -409,38 +409,38 @@ otherwise place the point at the beginning of the inserted text."
 	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
 	 (test-first-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-lines "<point>\n" test-first-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (push-mark)
-       (goto-char (point-min))
-       (should-error (org-x-convert-buffer-lines-into-subheadlines) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (push-mark)
+      (goto-char (point-min))
+      (should-error (org-x-convert-buffer-lines-into-subheadlines) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-subheadlines/underneath-a-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count ""))
-	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (funcall (-juxt (-partial #'s-join "\n") #'identity))))
-	 (test-buffer-text (concat test-tree "\n<point>" test-lines))
-	 (expected-stars (make-string (1+ test-headline-level) ?*))
-	 (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
-	    (push-mark)
-	    (goto-char (point-max))
-	    (org-x-convert-buffer-lines-into-subheadlines)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 ((actual-former-first-lines actual-lines-at-last-level) (->> actual-headlines
-								      (s-split "\n")
-								      (-split-with
-								       (lambda (x) (s-starts-with-p (format "%s " expected-stars) x)))))
-    (should (equal expected-former-first-lines actual-former-first-lines))
-    (should (length= actual-lines-at-last-level lines-with-content-count))
-    (should (seq-contains-p actual-lines-at-last-level expected-line)))))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count ""))
+	  (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
+	  (test-buffer-text (concat test-tree "\n<point>" test-lines))
+	  (expected-stars (make-string (1+ test-headline-level) ?*))
+	  (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
+	     (push-mark)
+	     (goto-char (point-max))
+	     (org-x-convert-buffer-lines-into-subheadlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  ((actual-former-first-lines actual-lines-at-last-level) (->> actual-headlines
+								       (s-split "\n")
+								       (-split-with
+									(lambda (x) (s-starts-with-p (format "%s " expected-stars) x)))))
+	  (should (equal expected-former-first-lines actual-former-first-lines))
+	  (should (length= actual-lines-at-last-level lines-with-content-count))
+	  (should (seq-contains-p actual-lines-at-last-level expected-line)))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-todos/empty-buffer ()
   :num-runs 100
@@ -463,23 +463,23 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-todos/before-first-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count "\n"))
-	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
-	 (test-headline (format "* TODO %s" (generate-random-word)))
-	 (test-buffer-text (concat test-lines "<point>\n" test-headline))
-	 (expected-line (format "* TODO %s" (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count "\n"))
+	  (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
+	  (test-headline (format "* TODO %s" (generate-random-word)))
+	  (test-buffer-text (concat test-lines "<point>\n" test-headline))
+	  (expected-line (format "* TODO %s" (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
 
-	    (push-mark)
-	    (goto-char (point-min))
-	    (org-x-convert-buffer-lines-into-todos)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 ((actual-lines actual-former-first-headline) (funcall (-compose (-juxt #'butlast #'-last-item) #'s-split)
-							       "\n" actual-headlines))
-	 (actual-random-line (generate-seq-take-random-value-from-seq actual-lines)))
+	     (push-mark)
+	     (goto-char (point-min))
+	     (org-x-convert-buffer-lines-into-todos)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  ((actual-lines actual-former-first-headline) (funcall (-compose (-juxt #'butlast #'-last-item) #'s-split)
+								"\n" actual-headlines))
+	  (actual-random-line (generate-seq-take-random-value-from-seq actual-lines)))
     (should (equal actual-former-first-headline test-headline))
     (should (length= actual-lines lines-with-content-count))
     (should (seq-contains-p actual-lines expected-line))))
@@ -526,10 +526,10 @@ otherwise place the point at the beginning of the inserted text."
 	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
 	 (blank-lines (make-list blank-lines-count "\n"))
 	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content))))
-     (org-test-with-temp-text test-lines
-       (push-mark)
-       (goto-char (point-max))
-       (should-error (org-x-convert-buffer-lines-into-subtodos) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-lines
+      (push-mark)
+      (goto-char (point-max))
+      (should-error (org-x-convert-buffer-lines-into-subtodos) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-subtodos/before-first-headline ()
   :num-runs 100
@@ -539,11 +539,11 @@ otherwise place the point at the beginning of the inserted text."
 	 (test-lines (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
 	 (test-first-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-lines "\n" test-first-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (push-mark)
-       (goto-char (point-max))
-       (forward-line -1)
-       (should-error (org-x-convert-buffer-lines-into-subtodos) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (push-mark)
+      (goto-char (point-max))
+      (forward-line -1)
+      (should-error (org-x-convert-buffer-lines-into-subtodos) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-convert-buffer-lines-into-subtodos/underneath-a-headline ()
   :num-runs 100
@@ -620,28 +620,28 @@ otherwise place the point at the beginning of the inserted text."
 (generate-ert-deftest-n-times org-x-yank-last-kill-as-headlines/before-first-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-kill-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-kill-lines (make-list blank-kill-lines-count "\n"))
-	 (test-kill (s-join "\n" (generate-append-and-shuffle blank-kill-lines lines-with-content)))
-	 (test-headline (format "* %s" (generate-random-word)))
-	 (blank-bluffer-lines-count (generate-random-nat-number-in-range (list 1 15)))
-	 (random-point-line (generate-random-nat-number-in-range (list 1 blank-bluffer-lines-count)))
-	 (test-blank-buffer-lines (--> blank-bluffer-lines-count
-				       (make-list it "\n")
-				       (-insert-at random-point-line "<point>" it)
-				       (s-join "\n" it)))
-	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline))
-	 (expected-line (format "* %s" (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-kill-as-headlines)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (->> actual-headlines
-			    (s-split "\n")
-			    (seq-filter (-rpartial #'length> 0))))
-	 (actual-new-headlines (seq-difference actual-lines (list test-headline))))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-kill-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-kill-lines (make-list blank-kill-lines-count "\n"))
+	  (test-kill (s-join "\n" (generate-append-and-shuffle blank-kill-lines lines-with-content)))
+	  (test-headline (format "* %s" (generate-random-word)))
+	  (blank-bluffer-lines-count (generate-random-nat-number-in-range (list 1 15)))
+	  (random-point-line (generate-random-nat-number-in-range (list 1 blank-bluffer-lines-count)))
+	  (test-blank-buffer-lines (--> blank-bluffer-lines-count
+					(make-list it "\n")
+					(-insert-at random-point-line "<point>" it)
+					(s-join "\n" it)))
+	  (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline))
+	  (expected-line (format "* %s" (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-kill-as-headlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (->> actual-headlines
+			     (s-split "\n")
+			     (seq-filter (-rpartial #'length> 0))))
+	  (actual-new-headlines (seq-difference actual-lines (list test-headline))))
     (should (length= actual-new-headlines lines-with-content-count))
     (should (seq-contains-p actual-new-headlines expected-line))))
 
@@ -767,31 +767,31 @@ with-text-diffs.ts
 				       (s-join "\n" it)))
 	 (test-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (kill-new (generate-random-sentence))
-       (should-error (org-x-yank-last-kill-as-subheadlines) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (kill-new (generate-random-sentence))
+      (should-error (org-x-yank-last-kill-as-subheadlines) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-yank-last-kill-as-subheadlines/underneath-a-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count ""))
-	 (test-kill (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (funcall (-juxt (-partial #'s-join "\n") #'identity))))
-	 (test-buffer-text (concat test-tree "\n<point>"))
-	 (expected-stars (make-string (1+ test-headline-level) ?*))
-	 (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-kill-as-subheadlines)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (s-split "\n" actual-headlines))
-	 (actual-new-headlines (seq-difference actual-lines expected-former-first-lines)))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count ""))
+	  (test-kill (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
+	  (test-buffer-text (concat test-tree "\n<point>"))
+	  (expected-stars (make-string (1+ test-headline-level) ?*))
+	  (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-kill-as-subheadlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (s-split "\n" actual-headlines))
+	  (actual-new-headlines (seq-difference actual-lines expected-former-first-lines)))
     (should (length= actual-new-headlines lines-with-content-count))
     (should (seq-contains-p actual-new-headlines expected-line))))
 
@@ -814,28 +814,28 @@ with-text-diffs.ts
 (generate-ert-deftest-n-times org-x-yank-last-kill-as-todos/before-first-headline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-kill-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-kill-lines (make-list blank-kill-lines-count "\n"))
-	 (test-kill (s-join "\n" (generate-append-and-shuffle blank-kill-lines lines-with-content)))
-	 (test-todo (format "* TODO %s" (generate-random-word)))
-	 (blank-bluffer-lines-count (generate-random-nat-number-in-range (list 1 15)))
-	 (random-point-line (generate-random-nat-number-in-range (list 1 blank-bluffer-lines-count)))
-	 (test-blank-buffer-lines (--> blank-bluffer-lines-count
-				       (make-list it "\n")
-				       (-insert-at random-point-line "<point>" it)
-				       (s-join "\n" it)))
-	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-todo))
-	 (expected-line (format "* TODO %s" (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-todos
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-kill-as-todos)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (->> actual-todos
-			    (s-split "\n")
-			    (seq-filter (-rpartial #'length> 0))))
-	 (actual-new-todos (seq-difference actual-lines (list test-todo))))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-kill-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-kill-lines (make-list blank-kill-lines-count "\n"))
+	  (test-kill (s-join "\n" (generate-append-and-shuffle blank-kill-lines lines-with-content)))
+	  (test-todo (format "* TODO %s" (generate-random-word)))
+	  (blank-bluffer-lines-count (generate-random-nat-number-in-range (list 1 15)))
+	  (random-point-line (generate-random-nat-number-in-range (list 1 blank-bluffer-lines-count)))
+	  (test-blank-buffer-lines (--> blank-bluffer-lines-count
+					(make-list it "\n")
+					(-insert-at random-point-line "<point>" it)
+					(s-join "\n" it)))
+	  (test-buffer-text (concat test-blank-buffer-lines "\n" test-todo))
+	  (expected-line (format "* TODO %s" (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-todos
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-kill-as-todos)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (->> actual-todos
+			     (s-split "\n")
+			     (seq-filter (-rpartial #'length> 0))))
+	  (actual-new-todos (seq-difference actual-lines (list test-todo))))
     (should (length= actual-new-todos lines-with-content-count))
     (should (seq-contains-p actual-new-todos expected-line))))
 
@@ -890,31 +890,31 @@ with-text-diffs.ts
 				       (s-join "\n" it)))
 	 (test-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (kill-new (generate-random-sentence))
-       (should-error (org-x-yank-last-kill-as-subtodos) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (kill-new (generate-random-sentence))
+      (should-error (org-x-yank-last-kill-as-subtodos) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-yank-last-kill-as-subtodos/underneath-a-bheadline ()
   :num-runs 100
   (-let* ((lines-with-content (generate-random-list-of-sentences))
-	 (lines-with-content-count (length lines-with-content))
-	 (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
-	 (blank-lines (make-list blank-lines-count ""))
-	 (test-kill (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (funcall (-juxt (-partial #'s-join "\n") #'identity))))
-	 (test-buffer-text (concat test-tree "\n<point>"))
-	 (expected-stars (make-string (1+ test-headline-level) ?*))
-	 (expected-line (format "%s TODO %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
-	 (actual-todos
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-kill-as-subtodos)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (s-split "\n" actual-todos))
-	 (actual-new-todos (seq-difference actual-lines expected-former-first-lines)))
+	  (lines-with-content-count (length lines-with-content))
+	  (blank-lines-count (generate-random-nat-number-in-range (list 1 (length lines-with-content))))
+	  (blank-lines (make-list blank-lines-count ""))
+	  (test-kill (s-join "\n" (generate-append-and-shuffle blank-lines lines-with-content)))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
+	  (test-buffer-text (concat test-tree "\n<point>"))
+	  (expected-stars (make-string (1+ test-headline-level) ?*))
+	  (expected-line (format "%s TODO %s" expected-stars (generate-seq-take-random-value-from-seq lines-with-content)))
+	  (actual-todos
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-kill-as-subtodos)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (s-split "\n" actual-todos))
+	  (actual-new-todos (seq-difference actual-lines expected-former-first-lines)))
     (should (length= actual-new-todos lines-with-content-count))
     (should (seq-contains-p actual-new-todos expected-line))))
 
@@ -948,9 +948,9 @@ with-text-diffs.ts
 	  (expected-line (format "* %s" (generate-seq-take-random-value-from-seq test-list)))
 	  (actual-headlines
 	   (org-test-with-temp-text test-buffer-text
-				    (kill-new test-kill)
-				    (org-x-yank-last-elisp-list-as-headlines)
-				    (buffer-substring-no-properties (point-min) (point-max))))
+	     (kill-new test-kill)
+	     (org-x-yank-last-elisp-list-as-headlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
 	  (actual-lines (->> actual-headlines
 			     (s-split "\n")
 			     (seq-filter (-rpartial #'length> 0))))
@@ -995,29 +995,29 @@ with-text-diffs.ts
 				       (s-join "\n" it)))
 	 (test-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (kill-new (generate-random-sentence))
-       (should-error (org-x-yank-last-elisp-list-as-subheadlines) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (kill-new (generate-random-sentence))
+      (should-error (org-x-yank-last-elisp-list-as-subheadlines) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-yank-last-elisp-list-as-subheadlines/underneath-a-headline ()
   :num-runs 100
   (-let* ((test-list (generate-random-list-of-words))
-	 (test-list-length (length test-list))
-	 (test-kill (prin1-to-string test-list))
-	 (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
-	 ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (funcall (-juxt (-partial #'s-join "\n") #'identity))))
-	 (test-buffer-text (concat test-tree "\n<point>"))
-	 (expected-stars (make-string (1+ test-headline-level) ?*))
-	 (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq test-list)))
-	 (actual-headlines
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-elisp-list-as-subheadlines)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (s-split "\n" actual-headlines))
-	 (actual-new-headlines (seq-difference actual-lines expected-former-first-lines)))
+	  (test-list-length (length test-list))
+	  (test-kill (prin1-to-string test-list))
+	  (test-headline-level (generate-random-nat-number-in-range (list 1 15)))
+	  ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-headline-level)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
+	  (test-buffer-text (concat test-tree "\n<point>"))
+	  (expected-stars (make-string (1+ test-headline-level) ?*))
+	  (expected-line (format "%s %s" expected-stars (generate-seq-take-random-value-from-seq test-list)))
+	  (actual-headlines
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-elisp-list-as-subheadlines)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (s-split "\n" actual-headlines))
+	  (actual-new-headlines (seq-difference actual-lines expected-former-first-lines)))
     (should (length= actual-new-headlines test-list-length))
     (should (seq-contains-p actual-new-headlines expected-line))))
 
@@ -1111,29 +1111,29 @@ with-text-diffs.ts
 				       (s-join "\n" it)))
 	 (test-headline (format "* %s" (generate-random-sentence)))
 	 (test-buffer-text (concat test-blank-buffer-lines "\n" test-headline)))
-     (org-test-with-temp-text test-buffer-text
-       (kill-new (generate-random-sentence))
-       (should-error (org-x-yank-last-elisp-list-as-subtodos) :type 'org-x--no-headline))))
+    (org-test-with-temp-text test-buffer-text
+      (kill-new (generate-random-sentence))
+      (should-error (org-x-yank-last-elisp-list-as-subtodos) :type 'org-x--no-headline))))
 
 (generate-ert-deftest-n-times org-x-yank-last-elisp-list-as-subtodos/underneath-a-todo ()
   :num-runs 100
   (-let* ((test-list (generate-random-list-of-words))
-	 (test-list-length (length test-list))
-	 (test-kill (prin1-to-string test-list))
-	 (test-todo-level (generate-random-nat-number-in-range (list 1 15)))
-	 ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-todo-level)
-			 (seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
-			 (funcall (-juxt (-partial #'s-join "\n") #'identity))))
-	 (test-buffer-text (concat test-tree "\n<point>"))
-	 (expected-stars (make-string (1+ test-todo-level) ?*))
-	 (expected-line (format "%s TODO %s" expected-stars (generate-seq-take-random-value-from-seq test-list)))
-	 (actual-todos
-	  (org-test-with-temp-text test-buffer-text
-	    (kill-new test-kill)
-	    (org-x-yank-last-elisp-list-as-subtodos)
-	    (buffer-substring-no-properties (point-min) (point-max))))
-	 (actual-lines (s-split "\n" actual-todos))
-	 (actual-new-todos (seq-difference actual-lines expected-former-first-lines)))
+	  (test-list-length (length test-list))
+	  (test-kill (prin1-to-string test-list))
+	  (test-todo-level (generate-random-nat-number-in-range (list 1 15)))
+	  ((test-tree expected-former-first-lines) (->> (generate-list-of-n-strings test-todo-level)
+							(seq-map-indexed (lambda (x i) (format "%s %s" (make-string (1+ i) ?*) x)))
+							(funcall (-juxt (-partial #'s-join "\n") #'identity))))
+	  (test-buffer-text (concat test-tree "\n<point>"))
+	  (expected-stars (make-string (1+ test-todo-level) ?*))
+	  (expected-line (format "%s TODO %s" expected-stars (generate-seq-take-random-value-from-seq test-list)))
+	  (actual-todos
+	   (org-test-with-temp-text test-buffer-text
+	     (kill-new test-kill)
+	     (org-x-yank-last-elisp-list-as-subtodos)
+	     (buffer-substring-no-properties (point-min) (point-max))))
+	  (actual-lines (s-split "\n" actual-todos))
+	  (actual-new-todos (seq-difference actual-lines expected-former-first-lines)))
     (should (length= actual-new-todos test-list-length))
     (should (seq-contains-p actual-new-todos expected-line))))
 
@@ -1154,12 +1154,12 @@ with-text-diffs.ts
 (generate-ert-deftest-n-times org-x--create-yank-last-kill-as-headlines-tree-sitter-function ()
   :num-runs 100
   (let* ((test-keyword (generate-seq-take-random-value-from-seq (list nil "TODO")))
-	(test-subheadlinep (generate-random-boolean))
-	(test-lang (generate-seq-take-random-value-from-seq (list 'typescript 'javascript 'json)))
-	(actual-func (org-x--create-yank-last-kill-as-headlines-tree-sitter-function
-		      test-lang
-		      test-keyword
-		      test-subheadlinep)))
+	 (test-subheadlinep (generate-random-boolean))
+	 (test-lang (generate-seq-take-random-value-from-seq (list 'typescript 'javascript 'json)))
+	 (actual-func (org-x--create-yank-last-kill-as-headlines-tree-sitter-function
+		       test-lang
+		       test-keyword
+		       test-subheadlinep)))
     (should (functionp actual-func))))
 
 (defconst org-x--TEST-TREE-SITTER-FUNC-CASES
@@ -1172,10 +1172,10 @@ with-text-diffs.ts
 (generate-ert-deftest-n-times org-x--create-text-of-tree-sitter-yank-last-as-x-functions-for-lang ()
   :num-runs 100
   (-let* (((test-keyword test-subheadlinep test-type) (generate-seq-take-random-value-from-seq org-x--TEST-TREE-SITTER-FUNC-CASES))
-	 (test-lang (generate-random-language-name))
-	 (test-func (org-x--create-text-of-tree-sitter-yank-last-as-x-functions-for-lang
-		     test-lang))
-	 ((actual-alias-name actual-alias) (funcall test-func (list test-keyword test-subheadlinep test-type))))
+	  (test-lang (generate-random-language-name))
+	  (test-func (org-x--create-text-of-tree-sitter-yank-last-as-x-functions-for-lang
+		      test-lang))
+	  ((actual-alias-name actual-alias) (funcall test-func (list test-keyword test-subheadlinep test-type))))
     (should (s-contains-p test-lang actual-alias-name))
     (should (s-contains-p test-type actual-alias-name))
     (should (s-starts-with-p "(defalias" actual-alias))
@@ -1186,7 +1186,7 @@ with-text-diffs.ts
 (generate-ert-deftest-n-times org-x--create-list-of-tree-sitter-yank-last-as-functions-for-lang ()
   :num-runs 100
   (-let* ((((_ __ test-type) expected-index) (generate-seq-random-value-with-position
-							org-x--TEST-TREE-SITTER-FUNC-CASES))
+					      org-x--TEST-TREE-SITTER-FUNC-CASES))
 	  (test-lang (generate-random-language-name))
 	  (test-headline-level (generate-random-org-headline-level))
 	  (actual-funcs (org-x--create-list-of-tree-sitter-yank-last-as-functions-for-lang
